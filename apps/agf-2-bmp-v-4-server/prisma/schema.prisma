@@ -1,0 +1,36 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Conversion {
+  createdAt  DateTime              @default(now())
+  file       File?                 @relation(fields: [fileId], references: [id])
+  fileId     String?
+  id         String                @id @default(cuid())
+  outputPath String?
+  status     EnumConversionStatus?
+  updatedAt  DateTime              @updatedAt
+}
+
+model File {
+  conversions Conversion[]
+  createdAt   DateTime           @default(now())
+  id          String             @id @default(cuid())
+  name        String?
+  path        String?
+  typeField   EnumFileTypeField?
+  updatedAt   DateTime           @updatedAt
+}
+
+enum EnumConversionStatus {
+  Option1
+}
+
+enum EnumFileTypeField {
+  Option1
+}
